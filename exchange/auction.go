@@ -12,11 +12,11 @@ import (
 
 	uuid "github.com/gofrs/uuid"
 	"github.com/prebid/openrtb/v20/openrtb2"
-	"github.com/prebid/prebid-server/v2/config"
-	"github.com/prebid/prebid-server/v2/exchange/entities"
-	"github.com/prebid/prebid-server/v2/openrtb_ext"
-	"github.com/prebid/prebid-server/v2/prebid_cache_client"
-	"github.com/prebid/prebid-server/v2/util/jsonutil"
+	"github.com/prebid/prebid-server/v4/config"
+	"github.com/prebid/prebid-server/v4/exchange/entities"
+	"github.com/prebid/prebid-server/v4/openrtb_ext"
+	"github.com/prebid/prebid-server/v4/prebid_cache_client"
+	"github.com/prebid/prebid-server/v4/util/jsonutil"
 )
 
 const (
@@ -44,9 +44,9 @@ type DebugData struct {
 
 func (d *DebugLog) BuildCacheString() {
 	if d.Regexp != nil {
-		d.Data.Request = fmt.Sprintf(d.Regexp.ReplaceAllString(d.Data.Request, ""))
-		d.Data.Headers = fmt.Sprintf(d.Regexp.ReplaceAllString(d.Data.Headers, ""))
-		d.Data.Response = fmt.Sprintf(d.Regexp.ReplaceAllString(d.Data.Response, ""))
+		d.Data.Request = fmt.Sprint(d.Regexp.ReplaceAllString(d.Data.Request, ""))
+		d.Data.Headers = fmt.Sprint(d.Regexp.ReplaceAllString(d.Data.Headers, ""))
+		d.Data.Response = fmt.Sprint(d.Regexp.ReplaceAllString(d.Data.Response, ""))
 	}
 
 	d.Data.Request = fmt.Sprintf("<Request>%s</Request>", d.Data.Request)
@@ -185,12 +185,12 @@ func (a *auction) validateAndUpdateMultiBid(adapterBids map[openrtb_ext.BidderNa
 	}
 }
 
-func (a *auction) setRoundedPrices(targetingData targetData) {
+func (a *auction) setRoundedPrices(targetingData targetData, account config.Account) {
 	roundedPrices := make(map[*entities.PbsOrtbBid]string, 5*len(a.winningBids))
 	for _, topBidsPerImp := range a.allBidsByBidder {
 		for _, topBidsPerBidder := range topBidsPerImp {
 			for _, topBid := range topBidsPerBidder {
-				roundedPrices[topBid] = GetPriceBucket(*topBid.Bid, targetingData)
+				roundedPrices[topBid] = GetPriceBucket(*topBid.Bid, targetingData, account)
 			}
 		}
 	}

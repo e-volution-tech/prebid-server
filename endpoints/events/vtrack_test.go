@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/prebid/prebid-server/v2/config"
-	"github.com/prebid/prebid-server/v2/openrtb_ext"
-	"github.com/prebid/prebid-server/v2/prebid_cache_client"
-	"github.com/prebid/prebid-server/v2/stored_requests"
-	"github.com/prebid/prebid-server/v2/util/jsonutil"
+	"github.com/prebid/prebid-server/v4/config"
+	"github.com/prebid/prebid-server/v4/openrtb_ext"
+	"github.com/prebid/prebid-server/v4/prebid_cache_client"
+	"github.com/prebid/prebid-server/v4/stored_requests"
+	"github.com/prebid/prebid-server/v4/util/jsonutil"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -471,7 +471,7 @@ func TestShouldSendToCacheExpectedPutsAndUpdatableBiddersWhenBidderVastAllowed(t
 
 	recorder := httptest.NewRecorder()
 
-	var mockNormalizeBidderName normalizeBidderName = func(name string) (openrtb_ext.BidderName, bool) {
+	var mockNormalizeBidderName openrtb_ext.BidderNameNormalizer = func(name string) (openrtb_ext.BidderName, bool) {
 		return openrtb_ext.BidderName(name), true
 	}
 	e := vtrackEndpoint{
